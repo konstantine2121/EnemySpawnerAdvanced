@@ -40,7 +40,7 @@ namespace Assets.Sources.Spawn
 
         #endregion Unity Actions
 
-        #region Spawn logic
+        #region Spawn
 
         private IEnemy SpawnEnemy()
         {
@@ -64,12 +64,6 @@ namespace Assets.Sources.Spawn
             return _spawnPoints.Length > 0 ?
                 _spawnPoints[Random.Range(0, _spawnPoints.Length)] :
                 null;
-        }
-
-        private void SetTarget(IEnemy enemy)
-        {
-            Vector3? target = _target?.position;
-            enemy?.SetTarget(target);
         }
 
         #endregion Spawn logic
@@ -103,7 +97,7 @@ namespace Assets.Sources.Spawn
             {
                 yield return delay;
 
-                SetTarget(SpawnEnemy());
+                SpawnEnemy().SetTarget(/*_target*/ null);
             }
             while (_isSpawning && enabled);
         }

@@ -2,12 +2,12 @@
 
 namespace Assets.Sources.Enemies
 {
-    [RequireComponent (typeof (Rigidbody))]
+    [RequireComponent(typeof(Rigidbody))]
     public class EnemyMovement : MonoBehaviour, IEnemy
     {
         [SerializeField][Range(0, 200)] private float _movementSpeed = 0.5f;
-        
-        private Vector3? _direction;
+
+        private IEntity _target;
         private Rigidbody _rigidbody;
 
         private void Awake()
@@ -15,26 +15,31 @@ namespace Assets.Sources.Enemies
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void SetTarget(Vector3? target)
+        public void SetTarget(IEntity target)
         {
-            if (target.HasValue)
-            {
-                var pathToTarget = target.Value - transform.position;
-                _direction = pathToTarget.normalized;
-            }
-            else
-            {
-                _direction = null;
-            }
+            _target = target;
         }
-        
-        private void FixedUpdate() 
+
+        private void FixedUpdate()
+        {
+            ResetSpeed();
+            UpdateSpeed();
+        }
+
+        private void ResetSpeed()
         {
             _rigidbody.velocity = Vector3.zero;
+        }
 
-            if (_direction.HasValue)
-            {   
-                _rigidbody.AddForce(_direction.Value * _movementSpeed * Time.deltaTime, ForceMode.VelocityChange);
+        private void UpdateSpeed()
+        {
+            if (_target != null)
+            {
+                var pathToTarget = _target.Position - transform.position;
+                var direction = pathToTarget.normalized;
+                var distance = Mathf.Min(pathToTarget.magnitude, _movementSpeed * Time.deltaTime);
+
+                _rigidbody.AddForce(direction * distance, ForceMode.VelocityChange);
             }
         }
     }

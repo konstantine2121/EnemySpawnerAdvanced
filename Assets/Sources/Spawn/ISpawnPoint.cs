@@ -1,9 +1,6 @@
-using UnityEngine;
-
 namespace Assets.Sources.Spawn
 {
-    public interface ISpawnPoint
+    public interface ISpawnPoint : IEntity
     {
-        Vector3 Position { get; }
     }
 }
