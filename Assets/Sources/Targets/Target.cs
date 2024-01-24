@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Assets.Sources.Spawn
+namespace Assets.Sources.Targets
 {
-    public class SpawnPoint : MonoBehaviour, ISpawnPoint
+    public class Target : MonoBehaviour, IPositionProvider
     {
         public Vector3 Position => transform.position;
     }

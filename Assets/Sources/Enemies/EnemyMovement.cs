@@ -6,19 +6,20 @@ namespace Assets.Sources.Enemies
     [RequireComponent(typeof(Rigidbody))]
     public class EnemyMovement : MonoBehaviour, IEnemy
     {
-        [SerializeField][Range(0, 200)] private float _movementSpeed = 0.5f;
+        #region Fields
+
+        [SerializeField, Range(0, 200)] private float _movementSpeed = 0.5f;
 
         private IPositionProvider _target;
         private Rigidbody _rigidbody;
 
+        #endregion Fields
+
+        #region Unity Events
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-        }
-
-        public void SetTarget(IPositionProvider target)
-        {
-            _target = target;
         }
 
         private void FixedUpdate()
@@ -26,6 +27,19 @@ namespace Assets.Sources.Enemies
             ResetSpeed();
             UpdateSpeed();
         }
+
+        #endregion Unity Events
+
+        #region IEnemy Implementation
+
+        public void SetTarget(IPositionProvider target)
+        {
+            _target = target;
+        }
+
+        #endregion IEnemy Implementation
+
+        #region Movement
 
         private void ResetSpeed()
         {
@@ -50,5 +64,7 @@ namespace Assets.Sources.Enemies
 
             _rigidbody.AddForce(direction * distance, ForceMode.VelocityChange);
         }
+
+        #endregion Movement
     }
 }

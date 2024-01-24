@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Sources.Enemies;
+using Assets.Sources.Targets;
 using UnityEngine;
 
 namespace Assets.Sources.Spawn
@@ -10,7 +11,7 @@ namespace Assets.Sources.Spawn
 
         [SerializeField, Range(1, 5)] private float _spawnInterval = 2;
         [SerializeField] private EnemyMovement _enemyPrefab;
-        [SerializeField] private Transform _target;
+        [SerializeField] private Target _target;
 
         private bool _isSpawning;
         private Coroutine spawnCoroutine;
@@ -18,10 +19,6 @@ namespace Assets.Sources.Spawn
         #endregion Fields
 
         #region Unity Events
-
-        private void Awake()
-        {
-        }
 
         private void OnEnable()
         {
@@ -75,7 +72,7 @@ namespace Assets.Sources.Spawn
             {
                 yield return delay;
 
-                SpawnEnemy().SetTarget(/*_target*/ null);
+                SpawnEnemy().SetTarget(_target);
             }
             while (_isSpawning && enabled);
         }
