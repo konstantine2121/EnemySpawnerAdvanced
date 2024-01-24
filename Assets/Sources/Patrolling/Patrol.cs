@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Sources.Patrolling
 {
-    internal class Patrol
+    public class Patrol : MonoBehaviour
     {
         [SerializeField] private WayPoint[] _wayPoints;
         [SerializeField, Range(0, 50)] private float _movementSpeed = 1;
