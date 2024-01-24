@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Sources.Extensions;
+using UnityEngine;
 
 namespace Assets.Sources.Enemies
 {
@@ -7,7 +8,7 @@ namespace Assets.Sources.Enemies
     {
         [SerializeField][Range(0, 200)] private float _movementSpeed = 0.5f;
 
-        private IEntity _target;
+        private IPositionProvider _target;
         private Rigidbody _rigidbody;
 
         private void Awake()
@@ -15,7 +16,7 @@ namespace Assets.Sources.Enemies
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void SetTarget(IEntity target)
+        public void SetTarget(IPositionProvider target)
         {
             _target = target;
         }
@@ -33,14 +34,21 @@ namespace Assets.Sources.Enemies
 
         private void UpdateSpeed()
         {
-            if (_target != null)
+            if (_target == null)
             {
-                var pathToTarget = _target.Position - transform.position;
-                var direction = pathToTarget.normalized;
-                var distance = Mathf.Min(pathToTarget.magnitude, _movementSpeed * Time.deltaTime);
-
-                _rigidbody.AddForce(direction * distance, ForceMode.VelocityChange);
+                return;
             }
+
+            var position = transform.position;
+            var targetPosition = _target.Position;
+
+            var direction = position.GetDirection(targetPosition);
+
+            var distance = Mathf.Min(
+                position.Distance(targetPosition),
+                _movementSpeed * Time.deltaTime);
+
+            _rigidbody.AddForce(direction * distance, ForceMode.VelocityChange);
         }
     }
 }

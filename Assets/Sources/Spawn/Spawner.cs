@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using Assets.Sources.Enemies;
 using UnityEngine;
 
@@ -9,11 +8,10 @@ namespace Assets.Sources.Spawn
     {
         #region Fields
 
-        [SerializeField][Range(1, 5)] private float _spawnInterval = 2;
+        [SerializeField, Range(1, 5)] private float _spawnInterval = 2;
         [SerializeField] private EnemyMovement _enemyPrefab;
         [SerializeField] private Transform _target;
 
-        private ISpawnPoint[] _spawnPoints;
         private bool _isSpawning;
         private Coroutine spawnCoroutine;
 
@@ -23,9 +21,6 @@ namespace Assets.Sources.Spawn
 
         private void Awake()
         {
-            _spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None)
-                .Cast<ISpawnPoint>()
-                .ToArray();
         }
 
         private void OnEnable()
@@ -44,31 +39,15 @@ namespace Assets.Sources.Spawn
 
         private IEnemy SpawnEnemy()
         {
-            var spawnPoint = GetRandomSpawnPoint();
-
-            if (!_isSpawning ||
-                _enemyPrefab == null ||
-                spawnPoint is null)
-            {
-                return null;
-            }
-
             return Instantiate(
-                _enemyPrefab, 
-                spawnPoint.Position, 
+                _enemyPrefab,
+                transform.position,
                 Quaternion.identity);
         }
 
-        private ISpawnPoint GetRandomSpawnPoint()
-        {
-            return _spawnPoints.Length > 0 ?
-                _spawnPoints[Random.Range(0, _spawnPoints.Length)] :
-                null;
-        }
+        #endregion Spawn 
 
-        #endregion Spawn logic
-
-        #region Spawn cycle
+        #region Enable/Disable Spawning 
 
         private void EnableSpawning()
         {
@@ -88,7 +67,6 @@ namespace Assets.Sources.Spawn
             }
         }
 
-
         private IEnumerator SpawnCoroutine()
         {
             var delay = new WaitForSeconds(_spawnInterval);
@@ -102,6 +80,6 @@ namespace Assets.Sources.Spawn
             while (_isSpawning && enabled);
         }
 
-        #endregion Spawn cycle
+        #endregion Enable/Disable Spawning
     }
 }

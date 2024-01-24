@@ -2,7 +2,7 @@
 
 namespace Assets.Sources
 {
-    public interface IEntity
+    public interface IPositionProvider
     {
         Vector3 Position { get; }
     }

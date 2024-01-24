@@ -1,6 +1,6 @@
 namespace Assets.Sources.Spawn
 {
-    public interface ISpawnPoint : IEntity
+    public interface ISpawnPoint : IPositionProvider
     {
     }
 }
