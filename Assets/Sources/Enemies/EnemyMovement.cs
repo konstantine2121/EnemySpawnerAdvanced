@@ -55,12 +55,8 @@ namespace Assets.Sources.Enemies
 
             var position = transform.position;
             var targetPosition = _target.Position;
-
             var direction = position.GetDirection(targetPosition);
-
-            var distance = Mathf.Min(
-                position.Distance(targetPosition),
-                _movementSpeed * Time.deltaTime);
+            var distance = _movementSpeed * Time.deltaTime;
 
             _rigidbody.AddForce(direction * distance, ForceMode.VelocityChange);
         }
